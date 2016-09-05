@@ -1,3 +1,18 @@
+* Conclusions
++ Toga is kinda fun, but not sure it is worth the effort for anything serious
+  + Would be hard to integrate with scientific stuff I think
+  + No particular accomodations for matplotlib or jupyter notebooks or anything
++ It might be a better idea to try one of
+  + flexx
+    + https://github.com/zoofIO/flexx
+    + UI framework based on web technologies
+    + alpha status as of 2016 but active development
+  + enaml
+    + http://nucleic.github.io/enaml/docs/index.html
+    + Very fancy desktop UI framework based on Qt
+    + Has own declarative mini-language
+    + Stable but stagnated since 2014 it seems
+
 * First app
 
 Following along with the tutorial
