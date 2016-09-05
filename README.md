@@ -1,2 +1,3 @@
-# toga-test
-Trying out the toga UI library 
+# Toga test
+Trying out the toga UI library, which claims to be all of python-native, platform-native, multi-platform, plus mobile!  We will see...
+

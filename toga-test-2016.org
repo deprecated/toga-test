@@ -1,0 +1,105 @@
+* First app
+
+Following along with the tutorial
+
+#+BEGIN_SRC python :tangle firstapp.py
+  import toga
+
+  def button_handler(widget):
+      print('hello')
+
+
+  def build(app):
+      container = toga.Container()
+      button = toga.Button('Hello World', on_press=button_handler)
+      button.style.set(margin=50)
+      container.add(button)
+
+      return container
+
+  if __name__ == '__main__':
+      app = toga.App('First App', 'org.pybee.helloworld', startup=build)
+      app.main_loop()
+    
+
+#+END_SRC
+** Run the app
++ Note that it is run as a module, not directly as a script
+#+BEGIN_SRC sh :results verbatim
+python -m firstapp 2>&1
+#+END_SRC
+
+#+RESULTS:
+** Comments
++ It does work
++ There are some problems with the menus not being selectable until after the button has been clicked
++ None of the classes (=Button=, =App=, etc) seem to have doc strings
++ Some loose language in the documentation:
+  + For instance, simple functions are called "methods"
+  + But maybe they do /become/ methods when they are passed to the initializer of =toga.App= and =toga.Button= 
+* A simple web browser
+Jumping straight to the last example from http://toga.readthedocs.io/en/latest/tutorial/tutorial-3.html
+
+#+BEGIN_SRC python :tangle graze.py
+  import toga
+  from colosseum import CSS
+
+
+
+  class Graze(toga.App):
+      def startup(self):
+          self.main_window = toga.MainWindow(self.name)
+          self.main_window.app = self
+
+          self.webview = toga.WebView(style=CSS(flex=1))
+          self.url_input = toga.TextInput(
+              initial='https://github.com/',
+              style=CSS(flex=1, margin=5)
+          )
+
+          container = toga.Container(
+              children=[
+                  toga.Container(
+                      children=[self.url_input,
+                                toga.Button('Go', on_press=self.load_page,
+                                            style=CSS(width=50))],
+                      style=CSS(flex_direction='row')),
+                  self.webview],
+              style=CSS(
+                  flex_direction='column'
+              )
+          )
+
+          self.main_window.content = container
+          self.webview.url = self.url_input.value
+
+          # Show the main window
+          self.main_window.show()
+
+      def load_page(self, widget):
+          url = self.url_input.value
+          if not url.startswith('http'):
+              url = 'https://' + url
+          print('Setting URL to', url)
+          self.webview.url = url
+
+  if __name__ == '__main__':
+      app = Graze('Graze', 'org.henney.graze')
+
+      app.main_loop()
+#+END_SRC
+
+
+#+BEGIN_SRC sh
+python -m graze
+#+END_SRC
+
+#+RESULTS:
+
++ This worked eventually, but I had to fix several mistakes.  Some of these may be due to the API having evolved:
+  1. Change =MainWindow= to =toga.MainWindow=
+  2. =toga.Button= does not have a =width= argument.  So I changed it to =style=CSS(width=...)= instead.
+  3. =toga.Container= does not appear to accept multiple positional arguments for the contained widgets.  So I changed it to passing a list as the =children= argument.
++ I also improved the =load_page= function to add the =https://= prefix if it is omitted
++ Note that it doesn't work to hit RETURN in the text input field.  You have to click the button.  And TAB does not work for switching to the button
+
